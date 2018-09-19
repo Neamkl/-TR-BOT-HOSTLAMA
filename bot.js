@@ -18,7 +18,7 @@ fs.readdir('./komutlar/', (err, files) => {
   if (err) console.error(err);
   log(`${files.length} Command Loading`);
   files.forEach(f => {
-    let props = require(`./commands/${f}`);
+    let props = require(`./komutlar/${f}`);
     log(`Loading Commands ${props.help.name}.`);
     client.commands.set(props.help.name, props);
     props.conf.aliases.forEach(alias => {
@@ -31,7 +31,7 @@ client.reload = command => {
   return new Promise((resolve, reject) => {
     try {
       delete require.cache[require.resolve(`./commands/${command}`)];
-      let cmd = require(`./commands/${command}`);
+      let cmd = require(`./komutlar/${command}`);
       client.commands.delete(command);
       client.aliases.forEach((cmd, alias) => {
         if (cmd === command) client.aliases.delete(alias);
@@ -50,7 +50,7 @@ client.reload = command => {
 client.load = command => {
   return new Promise((resolve, reject) => {
     try {
-      let cmd = require(`./commands/${command}`);
+      let cmd = require(`./komutlar/${command}`);
       client.commands.set(command, cmd);
       cmd.conf.aliases.forEach(alias => {
         client.aliases.set(alias, cmd.help.name);
@@ -66,7 +66,7 @@ client.unload = command => {
   return new Promise((resolve, reject) => {
     try {
       delete require.cache[require.resolve(`./commands/${command}`)];
-      let cmd = require(`./commands/${command}`);
+      let cmd = require(`./komutlar/${command}`);
       client.commands.delete(command);
       client.aliases.forEach((cmd, alias) => {
         if (cmd === command) client.aliases.delete(alias);
